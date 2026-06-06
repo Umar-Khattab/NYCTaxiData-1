@@ -89,6 +89,22 @@ class SignalRService {
     }
   }
 
+  public onSimulationProgress(callback: (progress: number, message: string) => void): void {
+    if (this.connection) {
+      this.connection.on('SimulationProgress', (progress, message) => {
+        callback(progress, message);
+      });
+    }
+  }
+
+  public onSimulationCompleted(callback: (result: any) => void): void {
+    if (this.connection) {
+      this.connection.on('SimulationCompleted', (result) => {
+        callback(result);
+      });
+    }
+  }
+
   private async ensureConnection(): Promise<void> {
     if (!this.connection || this.connection.state !== signalR.HubConnectionState.Connected) {
       await this.startConnection();
